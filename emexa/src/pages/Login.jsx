@@ -1,22 +1,35 @@
 import { useState } from 'react'
 import logo from '../assets/EMEXA Logo.png'
+import api from '../lib/api'
 
 export default function Login(){
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(false)
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const onSubmit = (e) => {
     e.preventDefault()
     setError('')
     if(!email || !password){
-      setError('Invalid email or password')
+      setError('Please enter email and password')
       return
     }
-    // placeholder: perform auth
-    setError('')
-    alert('Logged in (demo)')
+    setLoading(true)
+    api.post('/auth/login', { email, password })
+      .then((res) => {
+        // Example: backend returns { token, user }
+        if(res.token){
+          localStorage.setItem('token', res.token)
+        }
+        // redirect to app root or dashboard
+        window.location.hash = '#/'
+      })
+      .catch(err => {
+        setError(err.message || (err.error || 'Login failed'))
+      })
+      .finally(()=>setLoading(false))
   }
 
   return (
@@ -46,7 +59,7 @@ export default function Login(){
           <a className="link" href="#/forgot">Forgot your password?</a>
         </div>
 
-        <button className="btn" type="submit">Log in</button>
+  <button className="btn" type="submit" disabled={loading}>{loading ? 'Signing in...' : 'Log in'}</button>
 
         <div className="small-note">Don't have an account? <a className="link" href="#/register">Register</a></div>
       </form>

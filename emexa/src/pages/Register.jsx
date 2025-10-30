@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import logo from '../assets/EMEXA Logo.png'
+import api from '../lib/api'
 
 export default function Register(){
   const [fullName, setFullName] = useState('')
@@ -8,6 +9,7 @@ export default function Register(){
   const [confirm, setConfirm] = useState('')
   const [accountType, setAccountType] = useState('student')
   const [errors, setErrors] = useState({})
+  const [loading, setLoading] = useState(false)
 
   const validate = () => {
     const e = {}
@@ -24,7 +26,15 @@ export default function Register(){
     const e = validate()
     setErrors(e)
     if(Object.keys(e).length === 0){
-      alert('Registered (demo)')
+      setLoading(true)
+      api.post('/auth/register', { fullName, email, password, accountType })
+        .then(res => {
+          // could auto-login if backend returns token
+          if(res.token) localStorage.setItem('token', res.token)
+          window.location.hash = '#/login'
+        })
+        .catch(err => setErrors({ form: err.message || 'Registration failed' }))
+        .finally(()=>setLoading(false))
     }
   }
 
@@ -69,7 +79,7 @@ export default function Register(){
           </div>
         </div>
 
-        <button className="btn" type="submit">Register</button>
+  <button className="btn" type="submit" disabled={loading}>{loading ? 'Registering...' : 'Register'}</button>
 
         <div className="small-note">Already have an account? <a className="link" href="#/login">Log in</a></div>
       </form>
