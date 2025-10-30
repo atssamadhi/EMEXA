@@ -1,0 +1,46 @@
+import { useState } from 'react'
+import logo from '../assets/EMEXA Logo.png'
+
+export default function ForgotPassword(){
+  const [email, setEmail] = useState('')
+  const [sent, setSent] = useState(false)
+  const [error, setError] = useState('')
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    setError('')
+    if(!email){
+      setError('Please enter your email')
+      return
+    }
+    // simulate send
+    setSent(true)
+    setTimeout(()=>setSent(false),3000)
+  }
+
+  return (
+    <div className="auth-container">
+      <div className="brand">
+        <img src={logo} alt="EMEXA logo" className="brand-logo" />
+      </div>
+  <div className="auth-title">Reset your password</div>
+  <div className="auth-sub">Enter your email address and we'll send you a link to reset your password.</div>
+
+  <div className="auth-inner">
+  <form onSubmit={onSubmit}>
+        <div className={`field ${error ? 'error' : ''}`}>
+          <label>Email address</label>
+          <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter your email" />
+          {error && <div className="error-text">{error}</div>}
+        </div>
+
+        <button className="btn" type="submit">Send reset link</button>
+
+        <div style={{marginTop:12,textAlign:'center'}}><a className="link" href="#/login">Back to login</a></div>
+      </form>
+      </div>
+
+      {sent && <div className="success-overlay">Your reset link has been sent successfully!</div>}
+    </div>
+  )
+}
