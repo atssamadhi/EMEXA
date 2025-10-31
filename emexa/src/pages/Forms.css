@@ -83,7 +83,7 @@ body{
   background: #ffffff; /* ensure white inputs */
   color: #0b4f3a; /* darker text for contrast */
 }
-.field input::placeholder{ color: #9aa9a0; opacity:1 }
+.field input::placeholder{ color: #ffffff; opacity:1 }
 .field input:focus{box-shadow:0 0 0 3px rgba(11,107,58,0.06);border-color:var(--accent)}
 .field.error input{border-color:#e04b4b;box-shadow:0 0 0 3px rgba(224,75,75,0.06)}
 .field .error-text{color:#c0392b;font-size:12px;margin-top:6px}
