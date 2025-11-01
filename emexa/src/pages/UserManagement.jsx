@@ -35,18 +35,30 @@ export default function UserManagement() {
   }, [])
 
   const fetchUsers = async () => {
-    try {
-      setLoading(true)
-      const token = localStorage.getItem('token')
-      const response = await api.get('/users', token)
-      setUsers(response.users || [])
-      setError('')
-    } catch (err) {
-      setError(err.error || 'Failed to fetch users')
-    } finally {
+  try {
+    setLoading(true)
+    setError('') // Clear previous errors
+    
+    const token = localStorage.getItem('token')
+    
+    if (!token) {
+      setError('You need to login first to view users')
+      setUsers([])
       setLoading(false)
+      return
     }
+    
+    const response = await api.get('/users', token)
+    setUsers(response.users || [])
+    setError('')
+  } catch (err) {
+    console.error('Fetch users error:', err)
+    setError(err.error || err.message || 'Failed to fetch users')
+    setUsers([])
+  } finally {
+    setLoading(false)
   }
+}
 
   const handleAddUser = async (e) => {
     e.preventDefault()
@@ -156,42 +168,46 @@ export default function UserManagement() {
         </div>
 
         <div className="role-filter-container">
-          <button 
-            className="role-filter-btn"
-            onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-          >
-            All Roles ▼
-          </button>
-          
-          {showRoleDropdown && (
-            <div className="role-dropdown">
-              <label className="role-option">
-                <input
-                  type="checkbox"
-                  checked={selectedRoles.admin}
-                  onChange={() => handleRoleToggle('admin')}
-                />
-                <span>Admin</span>
-              </label>
-              <label className="role-option">
-                <input
-                  type="checkbox"
-                  checked={selectedRoles.teacher}
-                  onChange={() => handleRoleToggle('teacher')}
-                />
-                <span>Teacher</span>
-              </label>
-              <label className="role-option">
-                <input
-                  type="checkbox"
-                  checked={selectedRoles.student}
-                  onChange={() => handleRoleToggle('student')}
-                />
-                <span>Student</span>
-              </label>
-            </div>
-          )}
-        </div>
+  <button 
+    className="role-filter-btn"
+    onClick={() => setShowRoleDropdown(!showRoleDropdown)}
+  >
+    <span>All Roles</span>
+    <span className="dropdown-arrow">{showRoleDropdown ? '▲' : '▼'}</span>
+  </button>
+  
+  {showRoleDropdown && (
+    <>
+      <div className="dropdown-backdrop" onClick={() => setShowRoleDropdown(false)}></div>
+      <div className="role-dropdown">
+        <label className="role-option">
+          <input
+            type="checkbox"
+            checked={selectedRoles.admin}
+            onChange={() => handleRoleToggle('admin')}
+          />
+          <span>Admin</span>
+        </label>
+        <label className="role-option">
+          <input
+            type="checkbox"
+            checked={selectedRoles.teacher}
+            onChange={() => handleRoleToggle('teacher')}
+          />
+          <span>Teacher</span>
+        </label>
+        <label className="role-option">
+          <input
+            type="checkbox"
+            checked={selectedRoles.student}
+            onChange={() => handleRoleToggle('student')}
+          />
+          <span>Student</span>
+        </label>
+      </div>
+    </>
+  )}
+</div>
 
         <button 
           className="add-user-btn"
