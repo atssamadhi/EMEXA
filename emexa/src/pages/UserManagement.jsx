@@ -37,7 +37,7 @@ export default function UserManagement() {
   const fetchUsers = async () => {
   try {
     setLoading(true)
-    setError('') // Clear previous errors
+    setError('') 
     
     const token = localStorage.getItem('token')
     
