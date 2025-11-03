@@ -242,6 +242,21 @@
 }
 
 .role-admin {
+  background-color: #e8d4f8;
+  color: #6b21a8;
+}
+
+.role-teacher {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.role-student {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.role-admin {
   background-color: #e74c3c;
   color: white;
 }

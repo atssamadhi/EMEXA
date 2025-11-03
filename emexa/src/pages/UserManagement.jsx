@@ -427,3 +427,104 @@ export default function UserManagement() {
     </div>
   )
 }
+{!localStorage.getItem('token') && (
+  <div style={{
+    background: '#fff3cd',
+    padding: '1.5rem',
+    marginBottom: '2rem',
+    borderRadius: '8px',
+    border: '1px solid #ffc107',
+    textAlign: 'center'
+  }}>
+    <p style={{ marginBottom: '1rem', color: '#856404', fontSize: '1rem' }}>
+      ⚠️ You need to login first to manage users
+    </p>
+    <button
+      onClick={async () => {
+        try {
+          // Try to login with existing admin account
+          const loginRes = await api.post('/auth/login', {
+            email: 'john@example.com',
+            password: 'admin123'
+          })
+          localStorage.setItem('token', loginRes.token)
+          localStorage.setItem('user', JSON.stringify(loginRes.user))
+          alert('✅ Logged in as John Doe (Admin)')
+          fetchUsers()
+        } catch (err) {
+          alert('❌ Login failed. Make sure dummy data is created in backend.')
+        }
+      }}
+      style={{
+        background: '#16a085',
+        color: 'white',
+        padding: '0.875rem 2rem',
+        border: 'none',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        fontSize: '1rem',
+        fontWeight: '600',
+        boxShadow: '0 2px 4px rgba(22, 160, 133, 0.2)'
+      }}
+    >
+      🔑 Login as Admin (John Doe)
+    </button>
+  </div>
+)}
+// In UserManagement.jsx - these should already be there
+
+const openEditModal = (user) => {
+  setSelectedUser(user)
+  setFormData({
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    is_active: user.is_active,
+    password: '' // Don't populate password
+  })
+  setShowEditModal(true)
+}
+
+const openDeleteModal = (user) => {
+  setSelectedUser(user)
+  setShowDeleteModal(true)
+}
+
+const handleEditUser = async (e) => {
+  e.preventDefault()
+  try {
+    const token = localStorage.getItem('token')
+    const updateData = {
+      name: formData.name,
+      email: formData.email,
+      role: formData.role,
+      is_active: formData.is_active
+    }
+    
+    // Only include password if it was changed
+    if (formData.password) {
+      updateData.password = formData.password
+    }
+    
+    await api.put(`/users/${selectedUser.id}`, updateData, token)
+    setShowEditModal(false)
+    resetForm()
+    fetchUsers()
+    alert('✅ User updated successfully!')
+  } catch (err) {
+    alert(`❌ Error: ${err.error || err.message || 'Failed to update user'}`)
+  }
+}
+
+const handleDeleteUser = async () => {
+  try {
+    const token = localStorage.getItem('token')
+    await api.delete(`/users/${selectedUser.id}`, token)
+    setShowDeleteModal(false)
+    setSelectedUser(null)
+    fetchUsers()
+    alert('✅ User deleted successfully!')
+  } catch (err) {
+    alert(`❌ Error: ${err.error || err.message || 'Failed to delete user'}`)
+  }
+}
