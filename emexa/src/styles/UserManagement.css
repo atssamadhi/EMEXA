@@ -39,15 +39,20 @@
   border: 1px solid #ddd;
   border-radius: 10px;
   font-size: 1rem;
-  accent-color: #000;
   background-color: white;
   transition: all 0.3s;
+  color: #2c3e50;
+}
+
+.search-input::placeholder {
+  color: #95a5a6;
 }
 
 .search-input:focus {
   outline: none;
   border-color: #16a085;
   box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.1);
+  color: #2c3e50;
 }
 
 .role-filter-container {
@@ -67,7 +72,7 @@
   justify-content: space-between;
   gap: 1rem;
   transition: all 0.3s;
-  color: #000000;  /* Black text color */
+  color: #000000;
   font-weight: 500;
 }
 
@@ -157,17 +162,6 @@
   font-weight: 500;
 }
 
-/* Error message styling */
-.error-banner {
-  background-color: #fee;
-  color: #c33;
-  padding: 1.25rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-  border-left: 4px solid #e74c3c;
-  font-size: 1rem;
-}
-
 .add-user-btn {
   background-color: #16a085;
   color: white;
@@ -215,7 +209,7 @@
   padding: 1.25rem 1.5rem;
   text-align: left;
   font-weight: 600;
-  color: #495057;
+  color: #2c3e50;
   font-size: 0.95rem;
   border-bottom: 2px solid #dee2e6;
 }
@@ -223,7 +217,7 @@
 .users-table td {
   padding: 1.25rem 1.5rem;
   border-bottom: 1px solid #f0f0f0;
-  color: #495057;
+  color: #2c3e50;
   font-size: 0.95rem;
 }
 
@@ -316,7 +310,7 @@
 .no-data {
   text-align: center;
   padding: 4rem !important;
-  color: #95a5a6;
+  color: #2c3e50;
   font-size: 1.1rem;
 }
 
@@ -391,6 +385,13 @@
   font-size: 1rem;
   transition: all 0.3s;
   background-color: white;
+  color: #2c3e50;
+  font-family: inherit;
+}
+
+.form-group input::placeholder {
+  color: #95a5a6;
+  opacity: 1;
 }
 
 .form-group input:focus,
@@ -398,6 +399,13 @@
   outline: none;
   border-color: #16a085;
   box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.1);
+  color: #2c3e50;
+}
+
+/* Fix for select dropdown options */
+.form-group select option {
+  color: #2c3e50;
+  background-color: white;
 }
 
 .modal-actions {
